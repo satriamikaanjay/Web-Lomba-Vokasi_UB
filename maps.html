@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="greenesiaMap">Greenesia - Map</title>
+  <link rel="icon" href="img/Logo_utama.png">
+  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers/dist/leaflet-color-markers.css" />
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    #map {
+      height: calc(100vh - 70px); 
+      width: 100%;
+    }
+  </style>
+
+</head>
+<body>
+  <header class="site-header site-header-solid">
+    <div class="container navbar">
+      <div class="navbar-brand">
+        <a href="index.html">
+          <img src="img/Logo_utama.png" alt="Greenesia Logo" class="logo">
+          <span data-i18n="greenesia">Greenesia</span>
+        </a>
+      </div>
+      <div class="nav-wrapper">
+        <button class="close-menu">&times;</button>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="index.html" data-i18n="home">Home</a></li>
+            <li><a href="maps.html" data-i18n="maps">Maps</a></li>
+            <li><a href="impacts.html" data-i18n="impacts">Impacts</a></li>
+            <li><a href="about.html" data-i18n="about">About</a></li>
+            <li><a href="news.html" data-i18n="news">News</a></li>
+            <li><a href="contact.html" data-i18n="contact">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="nav-actions">
+          <select class="language-switcher">
+            <option value="en" selected>EN</option>
+            <option value="id">ID</option>
+          </select>
+          <a href="login.html" class="button button-donate" data-i18n="getStarted">Get Started</a>
+        </div>
+      </div>
+      <div class="custom-dropdown language-switcher-mobile">
+        <div class="dropdown-trigger">
+          <span class="selected-lang">EN</span>
+        </div>
+        <div class="dropdown-options">
+          <div class="dropdown-option" data-value="en">EN</div>
+          <div class="dropdown-option" data-value="id">ID</div>
+        </div>
+      </div>
+      <button class="hamburger-menu">&#9776;</button>
+    </div>
+  </header>
+
+  <div class="overlay"></div>
+
+  <main>
+    <div id="map"></div>
+    <div id="info-sidebar" class="sidebar">
+      <button class="close-btn">&times;</button>
+      <div id="sidebar-content">
+        <div id="plantation-count" data-i18n="plantationCount"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers/dist/leaflet-color-markers.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+    const infoSidebar = document.getElementById('info-sidebar');
+    const infoCloseBtn = infoSidebar.querySelector('.close-btn');
+    
+    var map = L.map('map').setView([-2.5, 118], 5);
+    var openstreetmap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    let layerControl;
+    let perkebunanLayer, mangrove250kLayer, mangrove50kLayer, mangrove25kLayer;
+    let tempMarker = null;
+    const baseMaps = {
+        "OpenStreetMap": openstreetmap
+    };
+
+    Promise.all([
+      fetch('Perkebunan_indonesia.json').then(res => res.json()),
+      fetch('Hutan_Mangrove_250K.json').then(res => res.json()),
+      fetch('Hutan_Mangrove_50K_simplified.json').then(res => res.json()),
+      fetch('Hutan_Mangrove_25K_simplified.json').then(res => res.json())
+    ])
+    .then(([perkebunanData, mangrove250k, mangrove50k, mangrove25k]) => {
+      perkebunanLayer = L.geoJSON(perkebunanData, {
+        style: { color: "#28a745", weight: 1, fillOpacity: 0.6 },
+        onEachFeature: onEachFeature
+      });
+
+      mangrove250kLayer = L.geoJSON(mangrove250k, {
+        style: { color: "#17a2b8", weight: 1, fillOpacity: 0.7 },
+        onEachFeature: onEachFeature
+      });
+
+      mangrove50kLayer = L.geoJSON(mangrove50k, {
+        style: { color: "#007bff", weight: 1, fillOpacity: 0.7 },
+        onEachFeature: onEachFeature
+      });
+
+      mangrove25kLayer = L.geoJSON(mangrove25k, {
+        style: { color: "#0056b3", weight: 1, fillOpacity: 0.7 },
+        onEachFeature: onEachFeature
+      });
+
+      updateMapTranslations();
+    })
+    .catch(err => {
+      console.error("Failed to load one or more GeoJSON files:", err);
+    });
+
+    function onEachFeature(feature, layer) {
+      layer.on('click', function (e) {
+        const clickLocation = e.latlng;
+        map.setView(clickLocation, 10);
+
+        if (tempMarker) {
+          map.removeLayer(tempMarker);
+        }
+        tempMarker = L.marker(clickLocation).addTo(map);
+
+        let sidebarContent = `<h4 data-i18n="featureInfo">${window.translations[window.currentLang].featureInfo}</h4>`;
+        if (feature.properties) {
+          sidebarContent += '<table class="feature-info">';
+          for (var key in feature.properties) {
+            sidebarContent += `<tr><th>${key}</th><td>${feature.properties[key]}</td></tr>`;
+          }
+          sidebarContent += '</table>';
+        }
+        openInfoSidebar(sidebarContent);
+      });
+    }
+
+    function openInfoSidebar(content) {
+      const sidebarContentEl = document.getElementById('sidebar-content');
+      sidebarContentEl.innerHTML = content;
+      
+      const wasSidebarActive = infoSidebar.classList.contains('active');
+      infoSidebar.classList.add('active');
+
+      if (!wasSidebarActive) {
+          if (window.innerWidth < 768) {
+            const sidebarHeight = window.innerHeight * 0.4; // 40vh
+            map.panBy([0, -sidebarHeight / 2], { animate: true });
+          } else {
+            const sidebarWidth = 350;
+            map.panBy([-sidebarWidth / 2, 0], { animate: true });
+          }
+      }
+    }
+
+    function updateMapTranslations() {
+        if (layerControl) {
+            map.removeControl(layerControl);
+        }
+        const overlayMaps = {
+            [window.translations[window.currentLang].plantation]: perkebunanLayer,
+            [window.translations[window.currentLang].mangroveLowRes]: mangrove250kLayer,
+            [window.translations[window.currentLang].mangroveMedRes]: mangrove50kLayer,
+            [window.translations[window.currentLang].mangroveHighRes]: mangrove25kLayer
+        };
+        layerControl = L.control.layers(baseMaps, overlayMaps, { collapsed: false, position: 'bottomright' }).addTo(map);
+
+        const sidebarTitle = document.querySelector('#info-sidebar h4');
+        if (sidebarTitle) {
+            sidebarTitle.textContent = window.translations[window.currentLang].featureInfo;
+        }
+    }
+
+    function closeInfoSidebar() {
+      if (infoSidebar) {
+        infoSidebar.classList.remove('active');
+        if (window.innerWidth < 768) {
+          const sidebarHeight = window.innerHeight * 0.4; // 40vh
+          map.panBy([0, sidebarHeight / 2], { animate: true });
+        } else {
+            const sidebarWidth = 350;
+            map.panBy([sidebarWidth / 2, 0], { animate: true });
+        }
+      }
+    }
+
+    if(infoCloseBtn) {
+      infoCloseBtn.addEventListener('click', closeInfoSidebar);
+    }
+
+    map.on('dragstart', () => {
+      map.closePopup();
+      if (infoSidebar && infoSidebar.classList.contains('active')) {
+        closeInfoSidebar();
+      }
+      if (tempMarker) {
+        map.removeLayer(tempMarker);
+        tempMarker = null;
+      }
+    });
+});
+  </script>
+
+  <script src="js/main.js"></script>
+  <script src="js/language.js"></script>
+  <script src="js/custom-dropdown.js"></script>
+ 
+</body>
+</html>
