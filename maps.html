@@ -134,13 +134,12 @@
 
     function onEachFeature(feature, layer) {
       layer.on('click', function (e) {
-        const clickLocation = e.latlng;
-        map.setView(clickLocation, 10);
+        map.setView(e.latlng, 14);
 
         if (tempMarker) {
           map.removeLayer(tempMarker);
         }
-        tempMarker = L.marker(clickLocation).addTo(map);
+        tempMarker = L.marker(e.latlng).addTo(map);
 
         let sidebarContent = `<h4 data-i18n="featureInfo">${window.translations[window.currentLang].featureInfo}</h4>`;
         if (feature.properties) {
@@ -149,9 +148,14 @@
             sidebarContent += `<tr><th>${key}</th><td>${feature.properties[key]}</td></tr>`;
           }
           sidebarContent += '</table>';
+          sidebarContent += `<button class="button button-primary" onclick="markLocation()" data-i18n="markLocation">${window.translations[window.currentLang].markLocation}</button>`;
         }
         openInfoSidebar(sidebarContent);
       });
+    }
+
+    function markLocation() {
+      alert('Location marked!');
     }
 
     function openInfoSidebar(content) {
@@ -182,7 +186,7 @@
             [window.translations[window.currentLang].mangroveMedRes]: mangrove50kLayer,
             [window.translations[window.currentLang].mangroveHighRes]: mangrove25kLayer
         };
-        layerControl = L.control.layers(baseMaps, overlayMaps, { collapsed: false, position: 'bottomright' }).addTo(map);
+        layerControl = L.control.layers(baseMaps, overlayMaps, { collapsed: false, position: 'topright' }).addTo(map);
 
         const sidebarTitle = document.querySelector('#info-sidebar h4');
         if (sidebarTitle) {
@@ -212,6 +216,13 @@
       if (infoSidebar && infoSidebar.classList.contains('active')) {
         closeInfoSidebar();
       }
+      if (tempMarker) {
+        map.removeLayer(tempMarker);
+        tempMarker = null;
+      }
+    });
+
+    map.on('zoomstart', () => {
       if (tempMarker) {
         map.removeLayer(tempMarker);
         tempMarker = null;

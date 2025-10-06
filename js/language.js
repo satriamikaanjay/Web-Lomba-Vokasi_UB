@@ -120,7 +120,21 @@ window.translations = {
         forgotPassword: "Forgot Password?",
         forgotPasswordTitle: "Forgot Password",
         resetPasswordButton: "Reset Password",
-        backToLogin: "Back to Login"
+        backToLogin: "Back to Login",
+        confirmPasswordLabel : "Confirm Password",
+        phoneLabel : "Phone Number",
+        addressLabel : "Address",
+        markLocation : "Mark Location",
+        userProfile: "User Profile",
+        userBio: "Passionate about saving the planet, one tree at a time.",
+        treesPlanted: "Trees Planted",
+        donated: "Donated",
+        activities: "Activities",
+        recentActivities: "Recent Activities",
+        markedLocations: "Marked Locations",
+        viewMarkedLocations: "View Marked Locations",
+        viewLocation: "View Location",
+        searchNews : "Search News"
     },
     id: {
         home: "Beranda",
@@ -243,7 +257,21 @@ window.translations = {
         forgotPassword: "Lupa Kata Sandi?",
         forgotPasswordTitle: "Lupa Kata Sandi",
         resetPasswordButton: "Atur Ulang Kata Sandi",
-        backToLogin: "Kembali untuk Masuk"
+        backToLogin: "Kembali untuk Masuk",
+        confirmPasswordLabel : "Konfirmasi Kata Sandi",
+        phoneLabel : "Nomor Telepon",
+        addressLabel : "Alamat",
+        markLocation : "Tandai Lokasi",
+        userProfile: "Profil Pengguna",
+        userBio: "Bersemangat menyelamatkan planet ini, satu pohon pada satu waktu.",
+        treesPlanted: "Pohon Ditanam",
+        donated: "Didonasikan",
+        activities: "Aktivitas",
+        recentActivities: "Aktivitas Terkini",
+        markedLocations: "Lokasi yang Ditandai",
+        viewMarkedLocations: "Lihat Lokasi yang Ditandai",
+        viewLocation: "Lihat Lokasi",
+        searchNews : "Cari Berita"
     }
 };
 

@@ -62,6 +62,9 @@
 
     <section class="content-section">
       <div class="container">
+        <div class="search-container">
+          <input type="text" id="news-search" placeholder="Search news..." data-i18n="[placeholder]searchNews">
+        </div>
         <div class="news-grid">
           <article class="news-card">
             <img src="https://asset.kompas.com/crops/d9sgpv270v6snPcaGa5keLDzrmc=/0x0:0x0/1200x800/data/photo/2025/04/16/67ff72c6aaa61.jpg" alt="News article thumbnail">
@@ -221,6 +224,22 @@
       } else {
         header.classList.remove('scrolled');
       }
+    });
+  </script>
+  <script>
+    document.getElementById('news-search').addEventListener('keyup', function() {
+      let filter = this.value.toLowerCase();
+      let cards = document.querySelectorAll('.news-card');
+
+      cards.forEach(function(card) {
+        let title = card.querySelector('h3').textContent.toLowerCase();
+        let text = card.querySelector('p').textContent.toLowerCase();
+        if (title.includes(filter) || text.includes(filter)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
     });
   </script>
 </body>

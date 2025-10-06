@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="userProfile">User Profile - Greenesia</title>
+  <link rel="icon" href="img/Logo_utama.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header site-header-solid">
+    <div class="container navbar">
+      <div class="navbar-brand">
+        <a href="index.html">
+          <img src="img/Logo_utama.png" alt="Greenesia Logo" class="logo">
+          <span data-i18n="greenesia">Greenesia</span>
+        </a>
+      </div>
+      <div class="nav-wrapper">
+        <button class="close-menu">&times;</button>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="index.html" data-i18n="home">Home</a></li>
+            <li><a href="maps.html" data-i18n="maps">Maps</a></li>
+            <li><a href="impacts.html" data-i18n="impacts">Impacts</a></li>
+            <li><a href="about.html" data-i18n="about">About</a></li>
+            <li><a href="news.html" data-i18n="news">News</a></li>
+            <li><a href="contact.html" data-i18n="contact">Contact</a></li>
+            <li><a href="profile.html" data-i18n="profile">Profile</a></li>
+          </ul>
+        </nav>
+        <div class="nav-actions">
+          <select class="language-switcher">
+            <option value="en" selected>EN</option>
+            <option value="id">ID</option>
+          </select>
+          <a href="login.html" class="button button-donate" data-i18n="getStarted">Get Started</a>
+        </div>
+      </div>
+      <div class="custom-dropdown language-switcher-mobile">
+        <div class="dropdown-trigger">
+          <span class="selected-lang">EN</span>
+        </div>
+        <div class="dropdown-options">
+          <div class="dropdown-option" data-value="en">EN</div>
+          <div class="dropdown-option" data-value="id">ID</div>
+        </div>
+      </div>
+      <button class="hamburger-menu">&#9776;</button>
+    </div>
+  </header>
+
+  <div class="overlay"></div>
+
+  <main>
+    <section class="content-section">
+      <div class="container">
+        <div class="profile-container">
+          <div class="profile-header">
+            <img src="img/pahri.jpg" alt="User profile picture" class="profile-picture">
+            <div class="profile-info">
+              <h2>Pahri</h2>
+              <p>pahri@example.com</p>
+              <p data-i18n="userBio">"Passionate about saving the planet, one tree at a time."</p>
+            </div>
+          </div>
+          <div class="profile-stats">
+            <div class="stat-item">
+              <h3>1,234</h3>
+              <p data-i18n="treesPlanted">Trees Planted</p>
+            </div>
+            <div class="stat-item">
+              <h3>$567</h3>
+              <p data-i18n="donated">Donated</p>
+            </div>
+            <div class="stat-item">
+              <h3>89</h3>
+              <p data-i18n="activities">Activities</p>
+            </div>
+          </div>
+          <div class="profile-content">
+            <h3 data-i18n="recentActivities">Recent Activities</h3>
+            <ul class="activity-list">
+              <li>Donated $50 to the "Save the Rainforest" campaign.</li>
+              <li>Joined the "Beach Cleanup" event in Bali.</li>
+              <li>Planted 10 trees in the local community garden.</li>
+              <li>Shared a news article about deforestation.</li>
+            </ul>
+          </div>
+          <div class="marked-locations">
+            <h3 data-i18n="markedLocations">Marked Locations</h3>
+            <button id="view-marked-locations-btn" class="button button-primary" data-i18n="viewMarkedLocations">View Marked Locations</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="marked-locations-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal-btn">&times;</span>
+      <h3 data-i18n="markedLocations">Marked Locations</h3>
+      <ul class="location-list-modal">
+        <li>
+          <h4>Taman Hutan Raya Ngurah Rai</h4>
+          <p>Bali, Indonesia</p>
+          <button class="button button-secondary" data-i18n="viewLocation">View Location</button>
+        </li>
+        <li>
+          <h4>Kebun Raya Bogor</h4>
+          <p>Bogor, Indonesia</p>
+          <button class="button button-secondary" data-i18n="viewLocation">View Location</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <footer class="site-footer-main">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-column">
+          <h4 data-i18n="footerAbout">About</h4>
+          <ul>
+            <li><a href="about.html" data-i18n="footerOurStory">Our Story</a></li>
+            <li><a href="about.html" data-i18n="footerTeam">Team</a></li>
+            <li><a href="#" data-i18n="footerPress">Press</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 data-i18n="footerResources">Resources</h4>
+          <ul>
+            <li><a href="#" data-i18n="footerIconLibrary">Icon Library</a></li>
+            <li><a href="#" data-i18n="footerForDevelopers">For Developers</a></li>
+            <li><a href="#" data-i18n="footerSupport">Support</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 data-i18n="footerConnect">Connect</h4>
+          <div class="social-links">
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+          </div>
+        </div>
+        <div class="footer-column newsletter">
+          <h4 data-i18n="footerNewsletter">Sign up for our newsletter</h4>
+          <p data-i18n="footerNewsletterText">Get the latest news and updates from the Greenesia community.</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Your email address" data-i18n="[placeholder]footerEmailPlaceholder">
+            <button type="submit" class="button button-primary" data-i18n="footerSignUp">Sign Up</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <footer class="site-footer-bottom">
+    <div class="container">
+      <p data-i18n="footerCopyright">&copy; 2025 Greenesia. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/language.js"></script>
+  <script src="js/custom-dropdown.js"></script>
+  <script>
+    // Modal script
+    var modal = document.getElementById("marked-locations-modal");
+    var btn = document.getElementById("view-marked-locations-btn");
+    var span = document.getElementsByClassName("close-modal-btn")[0];
+
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
